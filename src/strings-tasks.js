@@ -143,7 +143,7 @@ function repeatString(str, times) {
   return str.repeat(times);
 }
 
-/** ?????????????????????????????????????????????????????????????????????????????????????????????????
+/**
  * Remove the first occurrence of a substring from a string.
  *
  * @param {string} str - The input string.
@@ -156,7 +156,7 @@ function repeatString(str, times) {
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeFirstOccurrences(str, value) {
-  return str.match(value) ? str.replace(value, '') : str;
+  return str.indexOf(value) >= 0 ? str.replace(value, '') : str;
 }
 
 /**
@@ -171,8 +171,14 @@ function removeFirstOccurrences(str, value) {
  *   removeLastOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
-function removeLastOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeLastOccurrences(str, value) {
+  const valueIndex = str.lastIndexOf(value);
+  if (valueIndex !== -1) {
+    return (
+      str.substring(0, valueIndex) + str.substring(valueIndex + value.length)
+    );
+  }
+  return str;
 }
 
 /**
@@ -187,8 +193,15 @@ function removeLastOccurrences(/* str, value */) {
  *   sumOfCodes('') => 0
  *   sumOfCodes() => 0
  */
-function sumOfCodes(/* str */) {
-  throw new Error('Not implemented');
+function sumOfCodes(str) {
+  let sum = 0;
+  if (str === '' || !str) {
+    return 0;
+  }
+  for (let i = 0; i < str.length; i += 1) {
+    sum += str.charCodeAt(i);
+  }
+  return sum;
 }
 
 /**
@@ -202,8 +215,8 @@ function sumOfCodes(/* str */) {
  *   startsWith('Hello World', 'World') => false
  *   startsWith('Hello World', 'Hello') => true
  */
-function startsWith(/* str, substr */) {
-  throw new Error('Not implemented');
+function startsWith(str, substr) {
+  return str.startsWith(substr);
 }
 
 /**
@@ -217,8 +230,8 @@ function startsWith(/* str, substr */) {
  *   endsWith('Hello World', 'World') => true
  *   endsWith('Hello World', 'Hello') => false
  */
-function endsWith(/* str, substr */) {
-  throw new Error('Not implemented');
+function endsWith(str, substr) {
+  return str.endsWith(substr);
 }
 
 /**
@@ -234,8 +247,11 @@ function endsWith(/* str, substr */) {
  *   formatTime(0, 45) => "00:45"
  *   formatTime(0, 0) => "00:00"
  */
-function formatTime(/* minutes, seconds */) {
-  throw new Error('Not implemented');
+function formatTime(minutes, seconds) {
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+    2,
+    '0'
+  )}`;
 }
 
 /**
@@ -325,7 +341,7 @@ function countVowels(str) {
  *   isPalindrome('No lemon, no melon') => true
  */
 function isPalindrome(str) {
-  const str1 = str.replaceAll(' ', '').replace(',', '').toLowerCase();
+  const str1 = str.replace(/[\W_]/g, '').toLowerCase();
   const str2 = str1.split('').reverse().join('');
   return str1 === str2;
 }
@@ -363,7 +379,7 @@ function reverseWords(str) {
     .join(' ');
 }
 
-/** ????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+/**
  * Inverts the case of each character in the given string.
  *
  * @param {string} str - The input string.
@@ -376,19 +392,13 @@ function reverseWords(str) {
  */
 function invertCase(str) {
   return str
-    .split(' ')
-    .map((word) => {
-      const editedStr = word;
-      for (let i = 0; i < editedStr.length; i += 1) {
-        if (editedStr[i] === editedStr[i].toUpperCase()) {
-          editedStr[i].toLowerCase();
-        } else {
-          editedStr[i].toUpperCase();
-        }
-      }
-      return editedStr;
-    })
-    .join(' ');
+    .split('')
+    .map((letter) =>
+      letter === letter.toUpperCase()
+        ? letter.toLowerCase()
+        : letter.toUpperCase()
+    )
+    .join('');
 }
 
 /**
@@ -506,7 +516,7 @@ function encodeToRot13(str) {
  *   'K♠' => 51
  */
 function getCardId(value) {
-  const cardDeck = {
+  return {
     'A♣': 0,
     '2♣': 1,
     '3♣': 2,
@@ -559,8 +569,7 @@ function getCardId(value) {
     'J♠': 49,
     'Q♠': 50,
     'K♠': 51,
-  };
-  return cardDeck.value;
+  }[value];
 }
 
 module.exports = {
